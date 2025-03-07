@@ -1,0 +1,464 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "API BASE",
+    "version": "1.0.0",
+    "description": "API de base pour la gestion de l'authentification et des logs."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Register",
+        "description": "Inscription d'un nouvel utilisateur.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "last_name": {
+                    "type": "string"
+                  },
+                  "first_name": {
+                    "type": "string"
+                  },
+                  "username": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "password_confirm": {
+                    "type": "string"
+                  }
+                },
+                "required": ["email", "password", "password_confirm"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inscription réussie."
+          }
+        }
+      }
+    },
+    "/auth/activate-account": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Activate account",
+        "description": "Activation d'un utilisateur apres l'enregistrement.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": ["email", "code"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Account successfully activated."
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Login",
+        "description": "Connexion d'un utilisateur.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "required": ["email", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Connexion réussie."
+          }
+        }
+      }
+    },
+    "/auth/userDetails": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "infos user",
+        "description": "get infos user.",
+        "responses": {
+          "200": {
+            "description": "user infos"
+          }
+        }
+      }
+    },
+    "/auth/employee": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "employee user",
+        "description": "all employee user.",
+        "responses": {
+          "200": {
+            "description": "all employee "
+          }
+        }
+      }
+    },
+    "/auth/update/{id}": {
+      "patch": {
+        "tags": ["Auth"],
+        "summary": "update user",
+        "description": "update infos user.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "user Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "last_name": {
+                    "type": "string"
+                  },
+                  "first_name": {
+                    "type": "string"
+                  },
+                  "username": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "user updated successfull"
+          }
+        }
+      }
+    },
+    "/auth/updateImg/{id}": {
+      "patch": {
+        "tags": ["Auth"],
+        "summary": "update profile picture user",
+        "description": "update profile picture user.",
+        "operationId": "uploadFile",
+        "consumes": ["multipart/form-data"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "user Id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "additionalMetadata",
+            "in": "formData",
+            "description": "Additional data to pass to server",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "file to upload",
+            "required": false,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user updated successfull",
+            "schema": { "$ref": "#/definitions/ApiResponse" }
+          }
+        },
+        "security": [{ "petstore_auth": ["write:pets", "read:pets"] }]
+      }
+    },
+    "/logs/filters": {
+      "get": {
+        "tags": ["Logs"],
+        "summary": "Filters",
+        "description": "Récupère les logs filtrés.",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logs récupérés avec succès."
+          }
+        }
+      }
+    },
+    "/notifs/creates": {
+      "post": {
+        "tags": ["Notifications"],
+        "summary": "Create a new notications",
+        "description": "Creates a new Notifications associated with a specific user.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "employeeName": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "content": {
+                    "type": "string",
+                    "required": false
+                  },
+                  "required": ["employeeName", "content"]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Notifications created successfully."
+          }
+        }
+      }
+    },
+    "/notifs/updateStatus": {
+      "patch": {
+        "tags": ["Notifications"],
+        "summary": "approve or decline notications",
+        "description": " field status take value PENDING or RESOLVED",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "required": false
+                  },
+                  "userId": {
+                    "type": "string",
+                    "required": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Notifications status updated successfully."
+          }
+        }
+      }
+    },
+    "/notifs/responseNotifs": {
+      "get": {
+        "tags": ["Notifications"],
+        "summary": "notifs received employee",
+        "description": "get notifs received employee.",
+        "responses": {
+          "200": {
+            "description": "notifs employee"
+          }
+        }
+      }
+    },
+    "/notifs/allNotifs": {
+      "get": {
+        "tags": ["Notifications"],
+        "summary": "notifs received manager",
+        "description": "get notifs received manager.",
+        "responses": {
+          "200": {
+            "description": "notifs manager"
+          }
+        }
+      }
+    },
+    "/notifs/deleteNotif": {
+      "delete": {
+        "tags": ["Notifications"],
+        "summary": "notifs deleted",
+        "description": "notifs deleted",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "required": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "notifs deleted  successfully!!"
+          }
+        }
+      }
+    },
+    "/tasks/create": {
+      "post": {
+        "tags": ["Tasks"],
+        "summary": "Create a new task",
+        "description": "Creates a new task associated with a specific user.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "description": {
+                    "type": "string",
+                    "required": false
+                  },
+                  "userId": {
+                    "type": "string",
+                    "required": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Task created successfully."
+          }
+        }
+      }
+    },
+    "/tasks/resolved": {
+      "patch": {
+        "tags": ["Tasks"],
+        "summary": "resolved a task",
+        "description": "Update status tasks pending => resolved.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "required": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Task resolved successfully."
+          }
+        }
+      }
+    },
+    "/tasks/byuserid": {
+      "get": {
+        "tags": ["Tasks"],
+        "summary": "all task by userId",
+        "description": "display all task by userId",
+        "responses": {
+          "201": {
+            "description": "Tasks by userid."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
+}
