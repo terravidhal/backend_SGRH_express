@@ -17,7 +17,7 @@ const schema = {
         default: STATUS[0],
         required: false,
     },
-    userId: { // one to many (userId specific employee )
+    userId: { 
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true

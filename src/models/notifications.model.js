@@ -47,18 +47,13 @@ const schema = {
         },
         required: true
     },
-   /* content: {
-        type: String,
-        required: true,
-        default: null,
-    },*/
     status: {
         type: String,
         enum: STATUS,
         default: STATUS[2],
         required: false,
     },
-    userId: { // one to many (userId users create notifs => employee, admin or managers)
+    userId: { 
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true

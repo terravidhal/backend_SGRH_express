@@ -2,9 +2,7 @@ const { response } = require("../../../configs/app.config");
 const authService = require("../../../src/services/auth/auth.service");
 
 const getUser = async (req) => {
-
-   // const auth = req.header('Authorization'); // no works
-    const auth = req.headers['authorization']; // works in postman , no works in swagger
+    const auth = req.headers['authorization']; 
     if (!auth) return { error: true, message: 'Authorization key not found' };
 
 
